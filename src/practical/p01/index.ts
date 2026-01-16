@@ -1,29 +1,35 @@
 import axios from "axios";
 
-const API_ENDPOINT = "https://jsonplaceholder.typicode.com/posts";
-
 interface Data{
   id: number,
   title: string,
 }
 
-let dataObject: Data[];
+export async function getEdgePosts(): Promise<Data[]> {
+  try {
+    const res = await axios.get<Data[]>(
+      "https://jsonplaceholder.typicode.com/posts"
+    );
 
-export async function loadData() {
-  try{
-    const res = await axios.get(API_ENDPOINT);
-    const responseData = res.data as Data[];
-    return dataObject = [...responseData].sort((a,b) => a.id - b.id);
-  }catch{
-    throw new Error("Failed");
+    const responseData = res.data;
+
+    if (responseData.length === 0) return [];
+
+    if (responseData.length === 1) {
+      return [
+        { id: responseData[0].id, title: responseData[0].title },
+        { id: responseData[0].id, title: responseData[0].title }
+      ];
+    }
+
+    const firstData = responseData[0];
+    const lastData = responseData[responseData.length - 1];
+
+    return [
+      { id: firstData.id, title: firstData.title },
+      { id: lastData.id, title: lastData.title }
+    ];
+  } catch (error) {
+    throw error;
   }
 }
-
-export function getEdgePosts(){
-  const firstElement: string = dataObject[0];
-  const lastElement: string = dataObject[dataObject.length - 1];
-  console.log(firstElement);
-  console.log(lastElement);
-}
-
-getEdgePosts();
