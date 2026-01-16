@@ -22,7 +22,8 @@ export async function loadData() {
 export function getEdgePosts(){
   const firstElement: string = dataObject[0];
   const lastElement: string = dataObject[dataObject.length - 1];
-
+  console.log(firstElement);
+  console.log(lastElement);
 }
 
 getEdgePosts();
